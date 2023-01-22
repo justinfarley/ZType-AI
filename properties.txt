@@ -1,5 +1,5 @@
 #REGION TO CAPTURE
 regionX1=721
 regionY1=184
-regionX2=1200
-regionY2=903
+width=480
+height=720
