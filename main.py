@@ -159,17 +159,18 @@ if py.confirm("Welcome to the ZType AI I have created...\nTo Start press OK, if 
 properties = Properties()
 
 
-for match in MatchToWord("accidentalamaccidentaccidentally"):
-    print(match)
 
-# while(programRunning):
-#     if(py.keyDown("q")):
-#         exit()
-#     py.sleep(0.05)
-#     img = py.screenshot('ss.png', region=(properties.region[0], properties.region[1],properties.region[2],properties.region[3],))
+
+while(programRunning):
+    if(py.keyDown("q")):
+        exit()
+    py.sleep(0.05)
+    img = py.screenshot('ss.png', region=(properties.region[0], properties.region[1],properties.region[2],properties.region[3],))
     
-#     text = pytesseract.image_to_string(img)
-#     for letter in text:
-#         if(IsLetterNumber(letter)):
-#             py.typewrite(letter)
-#             py.sleep(0.05)
+    text = pytesseract.image_to_string(img)
+    print(text)
+    for word in MatchToWord(text):
+        py.write(word, interval=0.2)
+        py.sleep(0.05)
+    
+
