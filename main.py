@@ -34,20 +34,16 @@ words_12_Letters = ['accidentally','alternatives','announcement','applications',
 
 image = './images/test.png'
 
-illegal = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '~', '`', '/', '$', '%', '#', '^', '&', '(', ')', '*', '-', '_', ';', '[', ']', '{', '}', '=', '\\', '|', '�', ':', '>', '<', '.', '@', '�']
+illegal = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '©', '~', '`', '/', '$', '%', '#', '^', '&', '(', ')', '*', '-', '_', ';', '[', ']', '{', '}', '=', '\\', '|', '�', ':', '>', '<', '.', '@', '�', '+', '-', '_', 'Type the words to shoot!', "ENTER for EMP"]
 
-def IsTextOnScreen(text, fullText) -> bool:
+def IsTextOnScreen(text) -> bool:
 
-    if text in fullText:
-        img = py.screenshot(region=(properties.region[0], properties.region[1],properties.region[2],properties.region[3],))
-        imgText = pytesseract.image_to_string(img)
-        if text in imgText:
-            return True
-        else: 
-            return False
-    else:
+    img = py.screenshot(region=(properties.region[0], properties.region[1],properties.region[2],properties.region[3]))
+    imgText = pytesseract.image_to_string(img)
+    if text in imgText:
+        return True
+    else: 
         return False
-
 
 def IsLetterNumber(letter) -> bool:
     isLetter = True
@@ -170,24 +166,45 @@ if py.confirm("Welcome to the ZType AI I have created...\nTo Start press OK, if 
     exit()
     
 properties = Properties()
-img = py.screenshot('ss.png', region=(properties.region[0], properties.region[1],properties.region[2],properties.region[3],))
+img = py.screenshot('ss.png', region=(properties.region[0], properties.region[1],properties.region[2],properties.region[3]))
 
 text = pytesseract.image_to_string(img)
 
 while(programRunning):
+    img = py.screenshot('ss.png', region=(properties.region[0], properties.region[1],properties.region[2],properties.region[3]))
+    text = pytesseract.image_to_string(img)
+    text = text.replace("\n", "")
+    text = text.replace(" ", "")
+    gen = MatchToWord(text)
+
     if(keyboard.is_pressed("q")):
         exit()
-    
-    if MatchToWord(text) == 0:
-        img = py.screenshot('ss.png', region=(properties.region[0], properties.region[1],properties.region[2],properties.region[3],))
+
+    if sum(1 for _ in MatchToWord(text)) == 0:
+        img = py.screenshot('ss.png', region=(properties.region[0], properties.region[1],properties.region[2],properties.region[3]))
         text = pytesseract.image_to_string(img)
+        text = text.replace("\n", "")
+        text = text.replace(" ", "")
+        gen = MatchToWord(text)
     else:
         for char in illegal:
             text = text.replace(char, "")
         for word in MatchToWord(text):
-            print(str(IsTextOnScreen(word, text)) + " " + word)
-            if(IsTextOnScreen(word, text)):
-                py.write(word, interval=0.025)
-            else:
-                text = text.replace(word, "")
-                print(text)
+            print(word)
+            print(str(IsTextOnScreen(word)) + " " + word)
+
+            py.write(word, interval=0.025)
+            py.press("enter")
+            text = text.replace(word, "")
+            # img = py.screenshot('ss.png', region=(properties.region[0], properties.region[1],properties.region[2],properties.region[3]))
+            # text = pytesseract.image_to_string(img)
+
+            # if(IsTextOnScreen(word)):
+            #     py.write(word, interval=0.025)
+            #     py.press("enter")
+            #     text = text.replace(word, "")
+            #     img = py.screenshot('ss.png', region=(properties.region[0], properties.region[1],properties.region[2],properties.region[3]))
+            #     text = pytesseract.image_to_string(img)
+            # else:
+            #     text = text.replace(word, "")
+            #print("start" + text + "end")
